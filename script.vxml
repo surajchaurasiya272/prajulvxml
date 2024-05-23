@@ -1,0 +1,141 @@
+<vxml version="2.1" xmlns="http://www.w3.org/2001/vxml">
+  <form>
+    <property name="attempts" value="0"/> <!-- Initialize attempts counter -->
+    <property name="maxAttempts" value="3"/> <!-- Define maximum attempts -->
+    <block>
+      <menu id="main_menu">
+        <prompt>Welcome to our service.</prompt>
+        <field name="choice">
+          <prompt>Please press 1 for Research and Development, 2 for Support, 3 for 5G Department.</prompt>
+          <grammar mode="dtmf" root="digits">
+            <rule id="digits">
+              <one-of>
+                <item>1</item>
+                <item>2</item>
+                <item>3</item>
+              </one-of>
+            </rule>
+          </grammar>
+          <filled>
+            <if cond="choice == '1'">
+              <goto next="#rnd_menu"/>
+            </if>
+            <if cond="choice == '2'">
+              <goto next="#support_menu"/>
+            </if>
+            <if cond="choice == '3'">
+              <goto next="#5g_menu"/>
+            </if>
+          </filled>
+          <!-- The user was silent, restart the field. -->
+          <noinput>
+            <prompt>No input received. Please try again.</prompt>
+            <reprompt/>
+          </noinput>
+          <!-- The user said something that was not defined in our grammar. -->
+          <nomatch>
+            <if cond="attempts &lt; maxAttempts">
+              <assign name="attempts" expr="attempts + 1"/>  <!-- Increment attempts -->
+              <prompt>No match. Please try again.</prompt>
+              <reprompt/>
+            </if>
+            <if cond="attempts &gt;= maxAttempts">
+              <prompt>Exceeded maximum attempts. Goodbye.</prompt>
+              <exit/>
+            </if>
+          </nomatch>
+        </field>
+      </menu>
+    </block>
+
+    <!-- Research and Development menu -->
+    <menu id="rnd_menu">
+      <prompt>Research and Development Department.</prompt>
+      <field name="rnd_choice">
+        <prompt>Press 1 for Amit Pal, 2 for Kaoshlendra, 9 to return to the main menu.</prompt>
+        <grammar mode="dtmf" root="digits">
+          <rule id="digits">
+            <one-of>
+              <item>1</item>
+              <item>2</item>
+              <item>9</item> <!-- Add option to return to main menu -->
+            </one-of>
+          </rule>
+        </grammar>
+        <filled>
+          <if cond="rnd_choice == '1'">
+            <prompt>Transferring to Amit Pal.</prompt>
+            <transfer name="Amit Pal" dest="tel:1004" bridge="true"/>
+          </if>
+          <if cond="rnd_choice == '2'">
+            <prompt>Transferring to Kaoshlendra.</prompt>
+            <transfer name="Kaoshlendra" dest="tel:1005" bridge="true"/>
+          </if>
+          <if cond="rnd_choice == '9'">
+            <goto next="#main_menu"/>
+          </if>
+        </filled>
+      </field>
+    </menu>
+
+    <!-- Support menu -->
+    <menu id="support_menu">
+      <prompt>Support Department.</prompt>
+      <field name="support_choice">
+        <prompt>Press 1 for Sanjay, 2 for Akshat, 9 to return to the main menu.</prompt>
+        <grammar mode="dtmf" root="digits">
+          <rule id="digits">
+            <one-of>
+              <item>1</item>
+              <item>2</item>
+              <item>9</item> <!-- Add option to return to main menu -->
+            </one-of>
+          </rule>
+        </grammar>
+        <filled>
+          <if cond="support_choice == '1'">
+            <prompt>Transferring to Sanjay.</prompt>
+            <transfer name="Sanjay" dest="tel:1006" bridge="true"/>
+          </if>
+          <if cond="support_choice == '2'">
+            <prompt>Transferring to Akshat.</prompt>
+            <transfer name="Akshat" dest="tel:1007" bridge="true"/>
+          </if>
+          <if cond="support_choice == '9'">
+            <goto next="#main_menu"/>
+          </if>
+        </filled>
+      </field>
+    </menu>
+
+    <!-- 5G Department menu -->
+    <menu id="5g_menu">
+      <prompt>5G Department.</prompt>
+      <field name="5g_choice">
+        <prompt>Press 1 for Vibhore, 2 for Sooraj, 9 to return to the main menu.</prompt>
+        <grammar mode="dtmf" root="digits">
+          <rule id="digits">
+            <one-of>
+              <item>1</item>
+              <item>2</item>
+              <item>9</item> <!-- Add option to return to main menu -->
+            </one-of>
+          </rule>
+        </grammar>
+        <filled>
+          <if cond="5g_choice == '1'">
+            <prompt>Transferring to Vibhore.</prompt>
+            <transfer name="Vibhore" dest="tel:1008" bridge="true"/>
+          </if>
+          <if cond="5g_choice == '2'">
+            <prompt>Transferring to Sooraj.</prompt>
+            <transfer name="Sooraj" dest="tel:1009" bridge="true"/>
+          </if>
+          <if cond="5g_choice == '9'">
+            <goto next="#main_menu"/>
+          </if>
+        </filled>
+      </field>
+    </menu>
+  </form>
+</vxml>
